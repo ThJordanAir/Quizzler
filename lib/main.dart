@@ -39,6 +39,7 @@ class _QuizPageState extends State<QuizPage> {
   void checkAnswer(bool userPickedAnswer) {
     bool correctAnswer = quizBrain.getQuestionAnswer();
     setState(() {
+      //TODO Step 4 show alert, reset number and list
       if (userPickedAnswer == correctAnswer) {
         scoreKeeper.add(Icon(Icons.check, color: Colors.green));
       } else {
