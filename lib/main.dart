@@ -17,10 +17,7 @@ class Quizzler extends StatelessWidget {
       home: Scaffold(
         backgroundColor: Colors.grey.shade900,
         body: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
-            child: QuizPage(),
-          ),
+          child: Padding(padding: EdgeInsets.symmetric(horizontal: 10.0), child: QuizPage()),
         ),
       ),
     );
@@ -46,7 +43,34 @@ class _QuizPageState extends State<QuizPage> {
         scoreKeeper.add(Icon(Icons.close, color: Colors.red));
       }
       quizBrain.nextQuestion();
+      if (quizBrain.getQuestionNumber() == 0) {
+        showMyDialog();
+      }
     });
+  }
+
+  Future<void> showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Fertig'),
+          content: const Text('Du hast alle Fragen beantwortet.'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK weiter'),
+              onPressed: () {
+                setState(() {
+                  scoreKeeper = [];
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -72,13 +96,8 @@ class _QuizPageState extends State<QuizPage> {
           child: Padding(
             padding: EdgeInsets.all(15.0),
             child: TextButton(
-              style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all<Color>(Colors.green),
-              ),
-              child: Text(
-                'Wahr',
-                style: TextStyle(color: Colors.white, fontSize: 20.0),
-              ),
+              style: ButtonStyle(backgroundColor: WidgetStateProperty.all<Color>(Colors.green)),
+              child: Text('Wahr', style: TextStyle(color: Colors.white, fontSize: 20.0)),
               onPressed: () {
                 checkAnswer(true);
               },
@@ -89,13 +108,8 @@ class _QuizPageState extends State<QuizPage> {
           child: Padding(
             padding: EdgeInsets.all(15.0),
             child: TextButton(
-              style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all<Color>(Colors.red),
-              ),
-              child: Text(
-                'Falsch',
-                style: TextStyle(fontSize: 20.0, color: Colors.white),
-              ),
+              style: ButtonStyle(backgroundColor: WidgetStateProperty.all<Color>(Colors.red)),
+              child: Text('Falsch', style: TextStyle(fontSize: 20.0, color: Colors.white)),
               onPressed: () {
                 checkAnswer(false);
               },
